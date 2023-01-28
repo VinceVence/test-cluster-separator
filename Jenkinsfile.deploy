@@ -55,7 +55,6 @@ spec:
             container('ubuntu') {
               sh 'apt-get update'
               sh 'apt-get install -y curl'
-              sh 'apt install git -y'
               sh 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
               sh 'apt-get install -y unzip'
               sh 'unzip awscliv2.zip'
@@ -65,14 +64,13 @@ spec:
               sh "aws configure set aws_access_key_id ${env.AWS_ACCESS_KEY_ID}"
               sh "aws configure set aws_secret_access_key ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'aws configure set region us-east-1'
-
+              git credentialsId: 'tekton-git', url: 'https://github.com/devkinetics/DB-Deploy-Actnow.git', branch: 'main'
               sh "git clone https://github.com/devkinetics/devops-cli.git"
               sh 'apt install python3 -y'
               sh "python3 devops-cli/main.py init ${env.AWS_ACCESS_KEY_ID} ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'python3 devops-cli/main.py assume intern'
 
               sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
-              // }
               
             }
           }
