@@ -64,7 +64,7 @@ spec:
               sh "aws configure set aws_access_key_id ${env.AWS_ACCESS_KEY_ID}"
               sh "aws configure set aws_secret_access_key ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'aws configure set region us-east-1'
-              git credentialsId: 'tekton-git', url: 'https://github.com/devkinetics/devops-cli.git.git', branch: 'main'
+              git credentialsId: 'tekton-git', url: 'https://github.com/devkinetics/devops-cli.git', branch: 'main'
               sh "git clone https://github.com/devkinetics/devops-cli.git"
               sh 'apt install python3 -y'
               sh "python3 devops-cli/main.py init ${env.AWS_ACCESS_KEY_ID} ${env.AWS_SECRET_ACCESS_KEY}"
