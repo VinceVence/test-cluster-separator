@@ -1,0 +1,17 @@
+filepath: ""
+environments:
+  default:
+    values:
+    - jx-values.yaml
+namespace: hsvault
+repositories:
+- name: hashicorp
+  url: https://helm.releases.hashicorp.com
+releases:
+- chart: hashicorp/vault
+  name: vault
+  values:
+  - values.yaml
+  - jx-values.yaml
+templates: {}
+renderedvalues: {}

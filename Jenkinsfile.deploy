@@ -1,0 +1,87 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: test
+spec:
+  containers:
+  - name: aws
+    image: amazon/aws-cli:latest
+    volumeMounts:
+    - mountPath: "/var/jenkins_home/"
+      name: "jenkins"
+      readOnly: false
+    command:
+    - cat
+    tty: true
+  - name: alpine
+    image: alpine:latest
+    volumeMounts:
+    - mountPath: "/var/jenkins_home/"
+      name: "jenkins"
+      readOnly: false
+    command:
+    - cat
+    tty: true
+  - name: ubuntu
+    image: ubuntu:latest
+    volumeMounts:
+    - mountPath: "/var/jenkins_home/"
+      name: "jenkins"
+      readOnly: false
+    command:
+    - cat
+    tty: true
+  volumes:
+  - name: jenkins
+    persistentVolumeClaim:
+      claimName: jjb-pvc
+        '''
+                }
+    }
+       environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+    }
+
+    stages {
+        stage('Deploy Cybersecurity Tools') {
+            steps {
+                container('ubuntu') {
+                    // git credentialsId: 'tekton-git', url: 'https://github.com/devkinetics/DB-Deploy-Actnow.git', branch: 'main'
+                    sh """echo STAGE 1 Getting Dependencies
+                
+                sudo apt-get update
+                sudo apt-get install -y awscli
+                aws --version
+
+                aws eks update-kubeconfig --region us-east-1 --name devopsx-eks
+                
+                curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+                helm version
+                helm repo add stable https://kubernetes-charts.storage.googleapis.com
+                helm repo update
+
+                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+                echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+                sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+                kubectl version --client
+
+                kubectl create namespace defectdojo
+                kubectl create namespace kubeclarity
+                kubectl create namespace hsvault
+
+                helm install --generate-name -f helmfiles/defectdojo/helmfile.yaml charts/defectdojo --namespace defectdojo
+                helm install --generate-name -f helmfiles/vault/helmfile.yaml charts/vault --namespace hsvault
+
+                """
+                }
+            }
+        }
+    }
+}

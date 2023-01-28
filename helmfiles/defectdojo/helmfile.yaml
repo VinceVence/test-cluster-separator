@@ -1,0 +1,17 @@
+filepath: ""
+environments:
+  default:
+    values:
+    - jx-values.yaml
+namespace: defectdojo
+repositories:
+- name: helm-charts
+  url: https://raw.githubusercontent.com/DefectDojo/django-DefectDojo/helm-charts
+releases:
+- chart: helm-charts/defectdojo
+  name: defectdojo
+  values:
+  - values.yaml
+  - jx-values.yaml
+templates: {}
+renderedvalues: {}

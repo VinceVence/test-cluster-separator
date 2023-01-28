@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: defectdojo-nginx
+  namespace: defectdojo
+  annotations:
+    kubernetes.io/ingress.class: external-nginx
+    cert-manager.io/cluster-issuer: 'ssl-prod'
+spec:
+  tls:
+    - hosts:
+        - defectdojo.aws.devops.com.ph
+      secretName: defect-dojo-tls
+  rules:
+    - host: defectdojo.aws.devops.com.ph
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: defectdojo-django
+                port:
+                  number: 8080

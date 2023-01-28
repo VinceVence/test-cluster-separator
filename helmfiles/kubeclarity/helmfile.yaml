@@ -1,0 +1,17 @@
+filepath: ""
+environments:
+  default:
+    values:
+    - jx-values.yaml
+namespace: kubeclarity
+repositories:
+- name: kubeclarity
+  url: https://openclarity.github.io/kubeclarity
+releases:
+- chart: kubeclarity/kubeclarity
+  name: kubeclarity
+  values:
+  - values.yaml
+  - jx-values.yaml
+templates: {}
+renderedvalues: {}

@@ -1,0 +1,29 @@
+# Source: sonarqube-ssl/templates/sonarqube-nginx.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubeclarity-nginx
+  namespace: kubeclarity
+  annotations:
+    kubernetes.io/ingress.class: external-nginx
+    cert-manager.io/cluster-issuer: 'ssl-prod' # metadata name of your tls cluster issuer yaml file ; change accdr. to your ClusterIssuer/Issuer name
+    # go to kubectl get issuer -n <namespace of your tool> to check your cert-manager.io/issuer
+    # cert-manager.io/duration: 2160h
+    # cert-manager.io/renew-before: 2150h
+spec:
+  tls:
+    # if you apply the SAME SECRET name on both hosts. it will not issue a kind:secret for tls cert.
+    # secretName must be unique like salonga
+    - hosts:
+        - kubeclarity.aws.devops.com.ph # change base on your prefered subdomain. ex. <stupidshit>.pinoy.expert
+      secretName: kube-clarity-tls # any name would apply, as it will create a new one
+  rules:
+    - host: kubeclarity.aws.devops.com.ph # change base on your prefered subdomain. ex. <stupidshit>.pinoy.expert
+      http:
+        paths:
+          - backend:
+              service:
+                name: kubeclarity-kubeclarity #go to kubectl get service -n <namespace of your tool> to know your service name
+                port:
+                  number: 9999 #change it according to the port number oy your tool ; go to kubectl get service -n <namespace of your tool> to check the port #
+            pathType: ImplementationSpecific
