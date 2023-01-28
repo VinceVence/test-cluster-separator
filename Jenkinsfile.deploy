@@ -52,6 +52,9 @@ spec:
         stage('Update kube-context') {
           steps {
             container('ubuntu') {
+              sh 'apt-get update'
+              sh 'apt-get install -y awscli'
+              sh 'aws --version'
               sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
             }
           }
@@ -61,12 +64,7 @@ spec:
             steps {
                 container('ubuntu') {
                   sh 'echo STAGE 1 Getting Dependencies'
-                  
-                  sh 'apt-get update'
-                  sh 'apt-get install -y awscli'
-                  sh 'aws --version'
-
-                  
+                                   
                   sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
                   sh 'helm version'
                   sh 'helm repo add stable https://kubernetes-charts.storage.googleapis.com'
