@@ -96,8 +96,6 @@ spec:
                   sh 'kubectl version --client'
                   sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
 
-                  aws configure set aws_secret_access_key YOUR_SECRET_KEY 
-                  aws configure set region YOUR_REGION
 
                   sh 'kubectl config current-context'
                   sh 'kubectl create namespace defectdojo'
