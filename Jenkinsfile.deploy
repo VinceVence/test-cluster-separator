@@ -52,34 +52,32 @@ spec:
         stage('Deploy Cybersecurity Tools') {
             steps {
                 container('ubuntu') {
-                    
-                    sh """echo STAGE 1 Getting Dependencies
-                
-                sudo apt-get update
-                sudo apt-get install -y awscli
-                aws --version
+                  sh 'echo STAGE 1 Getting Dependencies'
+                  
+                  sh 'sudo apt-get update'
+                  sh 'sudo apt-get install -y awscli'
+                  sh 'aws --version'
 
-                aws eks update-kubeconfig --region us-east-1 --name devopsx-eks
-                
-                curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-                helm version
-                helm repo add stable https://kubernetes-charts.storage.googleapis.com
-                helm repo update
+                  sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
+                  
+                  sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
+                  sh 'helm version'
+                  sh 'helm repo add stable https://kubernetes-charts.storage.googleapis.com'
+                  sh 'helm repo update'
 
-                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-                echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-                sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-                kubectl version --client
+                  sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                  sh 'curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"'
+                  sh 'echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check'   
+                  sh 'sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
+                  sh 'kubectl version --client'
 
-                kubectl create namespace defectdojo
-                kubectl create namespace kubeclarity
-                kubectl create namespace hsvault
+                  sh 'kubectl create namespace defectdojo'
+                  sh 'kubectl create namespace kubeclarity'
+                  sh 'kubectl create namespace hsvault'
 
-                helm install --generate-name -f helmfiles/defectdojo/helmfile.yaml charts/defectdojo --namespace defectdojo
-                helm install --generate-name -f helmfiles/vault/helmfile.yaml charts/vault --namespace hsvault
+                  sh 'helm install --generate-name -f helmfiles/defectdojo/helmfile.yaml charts/defectdojo --namespace defectdojo'
+                  sh 'helm install --generate-name -f helmfiles/vault/helmfile.yaml charts/vault --namespace hsvault'
 
-                """
                 }
             }
         }
