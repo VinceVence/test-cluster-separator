@@ -91,11 +91,11 @@ spec:
                   sh 'kubectl version --client'
 
                   sh 'kubectl create namespace defectdojo'
-                  sh 'kubectl create namespace kubeclarity'
-                  sh 'kubectl create namespace hsvault'
+                  // sh 'kubectl create namespace kubeclarity'
+                  // sh 'kubectl create namespace hsvault'
 
                   sh 'helm install --generate-name -f helmfiles/defectdojo/helmfile.yaml charts/defectdojo --namespace defectdojo'
-                  sh 'helm install --generate-name -f helmfiles/vault/helmfile.yaml charts/vault --namespace hsvault'
+                  // sh 'helm install --generate-name -f helmfiles/vault/helmfile.yaml charts/vault --namespace hsvault'
 
                 }
             }
