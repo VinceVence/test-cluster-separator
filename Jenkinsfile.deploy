@@ -46,6 +46,7 @@ spec:
        environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        GITHUB_TOKEN = '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'
     }
 
     stages {
@@ -64,7 +65,7 @@ spec:
               sh "aws configure set aws_secret_access_key ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'aws configure set region us-east-1'
 
-              sh 'git clone https://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@github.com/devkinetics/devops-cli.git'
+              sh "git clone https://${env.GITHUB_TOKEN}@github.com/devkinetics/devops-cli.git"
               sh 'apt install python3 -y'
               sh "python3 devops-cli/main.py init ${env.AWS_ACCESS_KEY_ID} ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'python3 devops-cli/main.py assume intern'
