@@ -49,6 +49,14 @@ spec:
     }
 
     stages {
+        stage('Update kube-context') {
+          steps {
+            container('ubuntu') {
+              sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
+            }
+          }
+        }
+
         stage('Deploy Cybersecurity Tools') {
             steps {
                 container('ubuntu') {
@@ -58,7 +66,6 @@ spec:
                   sh 'apt-get install -y awscli'
                   sh 'aws --version'
 
-                  sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
                   
                   sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
                   sh 'helm version'
