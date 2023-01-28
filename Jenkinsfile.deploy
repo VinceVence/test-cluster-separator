@@ -53,7 +53,7 @@ spec:
           steps {
             container('ubuntu') {
               sh 'apt-get update'
-              sh 'wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip'
+              sh 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
               sh 'unzip awscliv2.zip'
               sh './aws/install'
               sh 'aws --version'
@@ -66,7 +66,7 @@ spec:
             steps {
                 container('ubuntu') {
                   sh 'echo STAGE 1 Getting Dependencies'
-                                   
+                  SH 'sudo apt-get install -y curl'
                   sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
                   sh 'helm version'
                   sh 'helm repo add stable https://kubernetes-charts.storage.googleapis.com'
