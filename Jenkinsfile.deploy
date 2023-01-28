@@ -94,7 +94,7 @@ spec:
                   sh 'echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check'   
                   sh 'install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
                   sh 'kubectl version --client'
-                  sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
+                  sh 'aws sts get-caller-indentity'
 
 
                   sh 'kubectl config current-context'
