@@ -59,13 +59,15 @@ spec:
               sh 'unzip awscliv2.zip'
               sh './aws/install'
               sh 'aws --version'
-              // withCredentials([
-              //   string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-              //   string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY'),
-              // ]) {
+
               sh "aws configure set aws_access_key_id ${env.AWS_ACCESS_KEY_ID}"
               sh "aws configure set aws_secret_access_key ${env.AWS_SECRET_ACCESS_KEY}"
               sh 'aws configure set region us-east-1'
+
+              sh 'git clone https://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@github.com/devkinetics/devops-cli.git'
+              sh 'apt install python3 -y'
+              sh "python3 devops-cli/main.py init ${env.AWS_ACCESS_KEY_ID} ${env.AWS_SECRET_ACCESS_KEY}"
+              sh 'python3 devops-cli/main.py assume intern'
 
               sh 'aws eks update-kubeconfig --region us-east-1 --name devopsx-eks'
               // }
