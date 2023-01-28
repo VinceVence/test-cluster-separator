@@ -52,7 +52,7 @@ spec:
         stage('Deploy Cybersecurity Tools') {
             steps {
                 container('ubuntu') {
-                    // git credentialsId: 'tekton-git', url: 'https://github.com/devkinetics/DB-Deploy-Actnow.git', branch: 'main'
+                    
                     sh """echo STAGE 1 Getting Dependencies
                 
                 sudo apt-get update
